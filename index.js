@@ -17,7 +17,7 @@ const client = new Client({
 });
 
 // Replace with your actual Channel ID
-const WELCOME_CHANNEL_ID = '123456789012'; 
+const WELCOME_CHANNEL_ID = '1545473982382219264'; 
 
 client.once('ready', () => {
   console.log(`✅ Success! ${client.user.tag} is ONLINE!`);
