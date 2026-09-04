@@ -16,8 +16,19 @@ const client = new Client({
   ]
 });
 
+// Replace with your actual Channel ID
+const WELCOME_CHANNEL_ID = '123456789012'; 
+
 client.once('ready', () => {
   console.log(`✅ Success! ${client.user.tag} is ONLINE!`);
+});
+
+// Automated Welcome Message Event
+client.on('guildMemberAdd', (member) => {
+  const channel = member.guild.channels.cache.get(WELCOME_CHANNEL_ID);
+  if (!channel) return;
+
+  channel.send(`🔥 ${member} **WELCOME TO MY GAMING SOCIETY 🎮**`);
 });
 
 client.on('messageCreate', async (message) => {
@@ -48,7 +59,7 @@ client.on('messageCreate', async (message) => {
 
     try {
       await targetUser.kick(reason);
-      message.reply(`👢 Successfully kicked **${targetUser.user.tag}** for: *${reason}*`);
+      message.reply(`boot Successfully kicked **${targetUser.user.tag}** for: *${reason}*`);
     } catch (error) {
       console.error(error);
       message.reply("❌ Failed to kick the user due to an error.");
