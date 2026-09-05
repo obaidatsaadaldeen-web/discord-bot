@@ -16,7 +16,7 @@ const client = new Client({
   ],
 });
 
-// Update with your actual welcome channel ID
+// Welcome channel ID
 const WELCOME_CHANNEL_ID = '123456789012345678';
 
 client.once('ready', () => {
@@ -51,7 +51,7 @@ client.on('messageCreate', async message => {
     const collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
 
     collector.on('collect', m => {
-      // Put your GIF URL between the single quotes below
+      // REPLACE THE URL INSIDE THE QUOTES WITH YOUR GIF LINK
       m.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
     });
   }
