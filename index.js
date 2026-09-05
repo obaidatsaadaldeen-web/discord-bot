@@ -47,12 +47,17 @@ client.on('messageCreate', async message => {
     return message.reply('ball');
   }
 
-  // 3. Standalone Persona GIF Command
+  // 3. Persona GIF Command
   if (content === '!persona' || content === 'persona') {
     return message.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
   }
 
-  // 4. Kick Command (!kick @user)
+  // 4. Hello GIF Command
+  if (content === '!hello') {
+    return message.reply('https://giphy.com/gifs/cute-pokemon-AFdcYElkoNAUE');
+  }
+
+  // 5. Kick Command (!kick @user)
   if (content.startsWith('!kick')) {
     if (!message.member.permissions.has(PermissionFlagsBits.KickMembers)) {
       return message.reply("You don't have permission to kick members!");
@@ -68,7 +73,7 @@ client.on('messageCreate', async message => {
     }
   }
 
-  // 5. Ban Command (!ban @user)
+  // 6. Ban Command (!ban @user)
   if (content.startsWith('!ban')) {
     if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
       return message.reply("You don't have permission to ban members!");
