@@ -57,7 +57,12 @@ client.on('messageCreate', async message => {
     return message.reply('https://giphy.com/gifs/cute-pokemon-AFdcYElkoNAUE');
   }
 
-  // 5. Kick Command (!kick @user)
+  // 5. Bye / Cya GIF Command
+  if (content === '!bye' || content === 'bye' || content === 'cya' || content === '!cya') {
+    return message.reply('https://giphy.com/gifs/bye-ichimaru-gin-upMEKtG4p7kuRmNOEL');
+  }
+
+  // 6. Kick Command (!kick @user)
   if (content.startsWith('!kick')) {
     if (!message.member.permissions.has(PermissionFlagsBits.KickMembers)) {
       return message.reply("You don't have permission to kick members!");
@@ -73,7 +78,7 @@ client.on('messageCreate', async message => {
     }
   }
 
-  // 6. Ban Command (!ban @user)
+  // 7. Ban Command (!ban @user)
   if (content.startsWith('!ban')) {
     if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
       return message.reply("You don't have permission to ban members!");
