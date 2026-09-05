@@ -1,11 +1,11 @@
 const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
-const http = require('http');
+const express = require('express');
 
-// Web server to keep Render's free Web Service running
-http.createServer((req, res) => {
-  res.write("Bot is online!");
-  res.end();
-}).listen(process.env.PORT || 3000);
+// Keep-alive server for Render + UptimeRobot
+const app = express();
+const PORT = process.env.PORT || 3000;
+app.get('/', (req, res) => res.send('AIZEN THE GOAT is active!'));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const client = new Client({
   intents: [
@@ -13,83 +13,78 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMembers,
-  ]
+  ],
 });
 
-// Replace with your actual Channel ID
-const WELCOME_CHANNEL_ID = '1545473982382219264'; 
+// Update with your actual welcome channel ID
+const WELCOME_CHANNEL_ID = '123456789012345678';
 
 client.once('ready', () => {
-  console.log(`✅ Success! ${client.user.tag} is ONLINE!`);
+  console.log(`Logged in as ${client.user.tag}!`);
 });
 
-// Automated Welcome Message Event
-client.on('guildMemberAdd', (member) => {
+// Welcome message event
+client.on('guildMemberAdd', async member => {
   const channel = member.guild.channels.cache.get(WELCOME_CHANNEL_ID);
-  if (!channel) return;
-
-  channel.send(`🔥 ${member} **WELCOME TO MY GAMING SOCIETY 🎮**`);
+  if (channel) {
+    channel.send(`WELCOME TO MY GAMING SOCIETY 🎮 <@${member.id}>!`);
+  }
 });
 
-client.on('messageCreate', async (message) => {
+// Commands
+client.on('messageCreate', async message => {
   if (message.author.bot) return;
 
-  // Ping Command
-  if (message.content === '!ping') {
-    message.reply('Pong! 🏓');
+  const content = message.content.toLowerCase();
+
+  // 1. Ping Command
+  if (content === '!ping') {
+    return message.reply('Pong! 🏓');
   }
 
-  // Kick Command: !kick @user Reason
-  if (message.content.startsWith('!kick')) {
+  // 2. Foot -> Ball -> Persona GIF Flow
+  if (content === '!foot') {
+    await message.reply('ball');
+
+    // Wait for someone to type "persona" in the channel within 60 seconds
+    const filter = response => response.content.toLowerCase().includes('persona');
+    const collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
+
+    collector.on('collect', m => {
+      // Put your GIF URL between the single quotes below
+      m.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
+    });
+  }
+
+  // 3. Kick Command (!kick @user)
+  if (content.startsWith('!kick')) {
     if (!message.member.permissions.has(PermissionFlagsBits.KickMembers)) {
-      return message.reply("❌ You don't have permission to use this command!");
+      return message.reply("You don't have permission to kick members!");
     }
-
-    const targetUser = message.mentions.members.first();
-    if (!targetUser) {
-      return message.reply("⚠️ Please mention a valid user to kick. Example: `!kick @user reason`");
-    }
-
-    if (!targetUser.kickable) {
-      return message.reply("❌ I cannot kick this user! Check if their role is higher than mine.");
-    }
-
-    const args = message.content.split(' ').slice(2);
-    const reason = args.join(' ') || 'No reason provided';
-
+    const member = message.mentions.members.first();
+    if (!member) return message.reply('Please mention a user to kick.');
+    
     try {
-      await targetUser.kick(reason);
-      message.reply(`boot Successfully kicked **${targetUser.user.tag}** for: *${reason}*`);
-    } catch (error) {
-      console.error(error);
-      message.reply("❌ Failed to kick the user due to an error.");
+      await member.kick();
+      message.reply(`${member.user.tag} was kicked from the server.`);
+    } catch (err) {
+      message.reply("Couldn't kick that user. Make sure my role is above theirs!");
     }
   }
 
-  // Ban Command: !ban @user Reason
-  if (message.content.startsWith('!ban')) {
+  // 4. Ban Command (!ban @user)
+  if (content.startsWith('!ban')) {
     if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-      return message.reply("❌ You don't have permission to use this command!");
+      return message.reply("You don't have permission to ban members!");
     }
-
-    const targetUser = message.mentions.members.first();
-    if (!targetUser) {
-      return message.reply("⚠️ Please mention a valid user to ban. Example: `!ban @user reason`");
-    }
-
-    if (!targetUser.bannable) {
-      return message.reply("❌ I cannot ban this user! Check if their role is higher than mine.");
-    }
-
-    const args = message.content.split(' ').slice(2);
-    const reason = args.join(' ') || 'No reason provided';
-
+    const member = message.mentions.members.first();
+    if (!member) return message.reply('Please mention a user to ban.');
+    
     try {
-      await targetUser.ban({ reason: reason });
-      message.reply(`🔨 Successfully banned **${targetUser.user.tag}** for: *${reason}*`);
-    } catch (error) {
-      console.error(error);
-      message.reply("❌ Failed to ban the user due to an error.");
+      await member.ban();
+      message.reply(`${member.user.tag} was banned from the server.`);
+    } catch (err) {
+      message.reply("Couldn't ban that user. Make sure my role is above theirs!");
     }
   }
 });
