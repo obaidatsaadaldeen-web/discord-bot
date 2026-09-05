@@ -42,20 +42,17 @@ client.on('messageCreate', async message => {
     return message.reply('Pong! 🏓');
   }
 
-  // 2. Foot -> Ball -> Persona GIF Flow
+  // 2. Foot Command
   if (content === '!foot') {
-    await message.reply('ball');
-
-    // Listens for "persona" in the channel for 60 seconds
-    const filter = response => response.content.toLowerCase().includes('persona');
-    const collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
-
-    collector.on('collect', m => {
-      m.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
-    });
+    return message.reply('ball');
   }
 
-  // 3. Kick Command (!kick @user)
+  // 3. Standalone Persona GIF Command
+  if (content === '!persona' || content === 'persona') {
+    return message.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
+  }
+
+  // 4. Kick Command (!kick @user)
   if (content.startsWith('!kick')) {
     if (!message.member.permissions.has(PermissionFlagsBits.KickMembers)) {
       return message.reply("You don't have permission to kick members!");
@@ -71,7 +68,7 @@ client.on('messageCreate', async message => {
     }
   }
 
-  // 4. Ban Command (!ban @user)
+  // 5. Ban Command (!ban @user)
   if (content.startsWith('!ban')) {
     if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
       return message.reply("You don't have permission to ban members!");
