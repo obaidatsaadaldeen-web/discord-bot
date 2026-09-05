@@ -54,12 +54,12 @@ client.on('messageCreate', async message => {
 
   // 4. Hello GIF Command
   if (content === '!hello') {
-    return message.reply('https://giphy.com/gifs/dragonball-goku-dragon-ball-z-cb9aF9tDyiR32');
+    return message.reply('https://giphy.com/gifs/cute-pokemon-AFdcYElkoNAUE');
   }
 
   // 5. Bye / Cya GIF Command
   if (content === '!bye' || content === 'bye' || content === 'cya' || content === '!cya') {
-    return message.reply('https://giphy.com/gifs/dragonball-goku-bye-waves-gokuwave-1236TCde5081f2');
+    return message.reply('https://giphy.com/gifs/bye-ichimaru-gin-upMEKtG4p7kuRmNOEL');
   }
 
   // 6. Kick Command (!kick @user)
