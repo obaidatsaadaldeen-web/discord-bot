@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
 const express = require('express');
 
-// Keep-alive server for Render + UptimeRobot
+// Express server to satisfy Render's web port requirement
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => res.send('AIZEN THE GOAT is active!'));
@@ -42,9 +42,17 @@ client.on('messageCreate', async message => {
     return message.reply('Pong! 🏓');
   }
 
-  // 2. Foot -> Ball Flow (GIF removed)
+  // 2. Foot -> Ball -> Persona GIF Flow
   if (content === '!foot') {
-    return message.reply('ball');
+    await message.reply('ball');
+
+    // Listens for "persona" in the channel for 60 seconds
+    const filter = response => response.content.toLowerCase().includes('persona');
+    const collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
+
+    collector.on('collect', m => {
+      m.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
+    });
   }
 
   // 3. Kick Command (!kick @user)
