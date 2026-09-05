@@ -35,24 +35,16 @@ client.on('guildMemberAdd', async member => {
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
 
-  const content = message.content.toLowerCase();
+  const content = message.content.toLowerCase().trim();
 
   // 1. Ping Command
   if (content === '!ping') {
     return message.reply('Pong! 🏓');
   }
 
-  // 2. Foot -> Ball -> Persona GIF Flow
+  // 2. Foot -> Ball Flow (GIF removed)
   if (content === '!foot') {
-    await message.reply('ball');
-
-    // Wait for someone to type "persona" in the channel within 60 seconds
-    const filter = response => response.content.toLowerCase().includes('persona');
-    const collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
-
-    collector.on('collect', m => {
-      m.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
-    });
+    return message.reply('ball');
   }
 
   // 3. Kick Command (!kick @user)
