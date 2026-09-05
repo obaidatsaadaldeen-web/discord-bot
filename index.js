@@ -54,12 +54,12 @@ client.on('messageCreate', async message => {
 
   // 4. Hello GIF Command
   if (content === '!hello') {
-    return message.reply('https://giphy.com/gifs/cute-pokemon-AFdcYElkoNAUE');
+    return message.reply('https://giphy.com/gifs/dragonball-goku-dragon-ball-z-cb9aF9tDyiR32');
   }
 
   // 5. Bye / Cya GIF Command
   if (content === '!bye' || content === 'bye' || content === 'cya' || content === '!cya') {
-    return message.reply('https://giphy.com/gifs/bye-ichimaru-gin-upMEKtG4p7kuRmNOEL');
+    return message.reply('https://giphy.com/gifs/dragonball-goku-bye-waves-gokuwave-1236TCde5081f2');
   }
 
   // 6. Kick Command (!kick @user)
@@ -91,6 +91,27 @@ client.on('messageCreate', async message => {
       message.reply(`${member.user.tag} was banned from the server.`);
     } catch (err) {
       message.reply("Couldn't ban that user. Make sure my role is above theirs!");
+    }
+  }
+
+  // 8. Unban Command (!unban USER_ID)
+  if (content.startsWith('!unban')) {
+    if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
+      return message.reply("You don't have permission to unban members!");
+    }
+
+    const args = message.content.split(' ');
+    const userId = args[1];
+
+    if (!userId) {
+      return message.reply('Please provide the User ID to unban (e.g. `!unban 123456789012345678`).');
+    }
+
+    try {
+      await message.guild.members.unban(userId);
+      message.reply(`Successfully unbanned user ID: \`${userId}\`.`);
+    } catch (err) {
+      message.reply("Could not unban that user. Check if the User ID is correct or if they're actually banned.");
     }
   }
 });
