@@ -117,5 +117,3 @@ client.on('messageCreate', async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
-
-And here is the index.js or smth change it to these rules if happened ban automatic
