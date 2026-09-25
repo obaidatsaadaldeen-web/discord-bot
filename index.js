@@ -1,7 +1,6 @@
 const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
 const express = require('express');
 
-// Express server to satisfy Render's web port requirement
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => res.send('AIZEN THE GOAT is active!'));
@@ -16,14 +15,12 @@ const client = new Client({
   ],
 });
 
-// Welcome channel ID
 const WELCOME_CHANNEL_ID = '123456789012345678';
 
 client.once('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`SUCCESS: Logged in as ${client.user.tag}!`);
 });
 
-// Welcome message event
 client.on('guildMemberAdd', async member => {
   const channel = member.guild.channels.cache.get(WELCOME_CHANNEL_ID);
   if (channel) {
@@ -31,89 +28,45 @@ client.on('guildMemberAdd', async member => {
   }
 });
 
-// Commands
 client.on('messageCreate', async message => {
   if (message.author.bot) return;
 
   const content = message.content.toLowerCase().trim();
 
-  // 1. Ping Command
-  if (content === '!ping') {
-    return message.reply('Pong! 🏓');
-  }
+  if (content === '!ping') return message.reply('Pong! 🏓');
+  if (content === '!foot') return message.reply('ball');
+  if (content === '!persona' || content === 'persona') return message.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
+  if (content === '!hello') return message.reply('https://giphy.com/gifs/cute-pokemon-AFdcYElkoNAUE');
+  if (content === '!bye' || content === 'bye' || content === 'cya' || content === '!cya') return message.reply('https://giphy.com/gifs/bye-ichimaru-gin-upMEKtG4p7kuRmNOEL');
 
-  // 2. Foot Command
-  if (content === '!foot') {
-    return message.reply('ball');
-  }
-
-  // 3. Persona GIF Command
-  if (content === '!persona' || content === 'persona') {
-    return message.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
-  }
-
-  // 4. Hello GIF Command
-  if (content === '!hello') {
-    return message.reply('https://giphy.com/gifs/cute-pokemon-AFdcYElkoNAUE');
-  }
-
-  // 5. Bye / Cya GIF Command
-  if (content === '!bye' || content === 'bye' || content === 'cya' || content === '!cya') {
-    return message.reply('https://giphy.com/gifs/bye-ichimaru-gin-upMEKtG4p7kuRmNOEL');
-  }
-
-  // 6. Kick Command (!kick @user)
   if (content.startsWith('!kick')) {
-    if (!message.member.permissions.has(PermissionFlagsBits.KickMembers)) {
-      return message.reply("You don't have permission to kick members!");
-    }
+    if (!message.member.permissions.has(PermissionFlagsBits.KickMembers)) return message.reply("No permission!");
     const member = message.mentions.members.first();
-    if (!member) return message.reply('Please mention a user to kick.');
-    
-    try {
-      await member.kick();
-      message.reply(`${member.user.tag} was kicked from the server.`);
-    } catch (err) {
-      message.reply("Couldn't kick that user. Make sure my role is above theirs!");
-    }
+    if (!member) return message.reply('Mention a user.');
+    try { await member.kick(); message.reply(`${member.user.tag} kicked.`); } catch { message.reply("Could not kick."); }
   }
 
-  // 7. Ban Command (!ban @user)
   if (content.startsWith('!ban')) {
-    if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-      return message.reply("You don't have permission to ban members!");
-    }
+    if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) return message.reply("No permission!");
     const member = message.mentions.members.first();
-    if (!member) return message.reply('Please mention a user to ban.');
-    
-    try {
-      await member.ban();
-      message.reply(`${member.user.tag} was banned from the server.`);
-    } catch (err) {
-      message.reply("Couldn't ban that user. Make sure my role is above theirs!");
-    }
+    if (!member) return message.reply('Mention a user.');
+    try { await member.ban(); message.reply(`${member.user.tag} banned.`); } catch { message.reply("Could not ban."); }
   }
 
-  // 8. Unban Command (!unban USER_ID)
   if (content.startsWith('!unban')) {
-    if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) {
-      return message.reply("You don't have permission to unban members!");
-    }
-
-    const args = message.content.split(' ');
-    const userId = args[1];
-
-    if (!userId) {
-      return message.reply('Please provide the User ID to unban (e.g. `!unban 123456789012345678`).');
-    }
-
-    try {
-      await message.guild.members.unban(userId);
-      message.reply(`Successfully unbanned user ID: \`${userId}\`.`);
-    } catch (err) {
-      message.reply("Could not unban that user. Check if the User ID is correct or if they're actually banned.");
-    }
+    if (!message.member.permissions.has(PermissionFlagsBits.BanMembers)) return message.reply("No permission!");
+    const userId = message.content.split(' ')[1];
+    if (!userId) return message.reply('Provide User ID.');
+    try { await message.guild.members.unban(userId); message.reply(`Unbanned \`${userId}\`.`); } catch { message.reply("Could not unban."); }
   }
 });
 
-client.login(process.env.DISCORD_TOKEN);
+// LOGIN WITH DEBUG LOGGING
+console.log("Attempting Discord login...");
+if (!process.env.DISCORD_TOKEN) {
+  console.log("ERROR: DISCORD_TOKEN is missing or undefined in environment variables!");
+} else {
+  client.login(process.env.DISCORD_TOKEN).catch(err => {
+    console.error("LOGIN FAILED WITH ERROR:", err.message);
+  });
+}
