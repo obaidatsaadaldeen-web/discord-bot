@@ -116,4 +116,4 @@ client.on('messageCreate', async message => {
   }
 });
 
-client.login(process.env.1545473982382219264);
+client.login(process.env.123456789012);
