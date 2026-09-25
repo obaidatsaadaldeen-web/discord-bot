@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
+Const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
 const express = require('express');
 
 // Express server to satisfy Render's web port requirement
@@ -19,9 +19,6 @@ const client = new Client({
 // Welcome channel ID
 const WELCOME_CHANNEL_ID = '123456789012345678';
 
-// Spam tracker: 10 messages in 10 seconds
-const userMessageMap = new Map();
-
 client.once('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -36,27 +33,7 @@ client.on('guildMemberAdd', async member => {
 
 // Commands
 client.on('messageCreate', async message => {
-  if (message.author.bot || !message.guild) return;
-
-  // --- Spam Protection: >10 messages in 10 seconds ---
-  const isAdmin = message.member?.permissions.has(PermissionFlagsBits.Administrator);
-  if (!isAdmin) {
-    const now = Date.now();
-    const userId = message.author.id;
-
-    if (!userMessageMap.has(userId)) userMessageMap.set(userId, []);
-    const timestamps = userMessageMap.get(userId);
-    timestamps.push(now);
-
-    const recent = timestamps.filter(time => now - time < 10000);
-    userMessageMap.set(userId, recent);
-
-    if (recent.length > 10) {
-      userMessageMap.delete(userId);
-      await message.guild.members.ban(message.author.id, { reason: 'Auto-Ban: Spamming' }).catch(() => {});
-      return message.channel.send(`🚫 <@${message.author.id}> was automatically banned for spamming.`);
-    }
-  }
+  if (message.author.bot) return;
 
   const content = message.content.toLowerCase().trim();
 
@@ -140,3 +117,5 @@ client.on('messageCreate', async message => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+And here is the index.js or smth change it to these rules if happened ban automatic
