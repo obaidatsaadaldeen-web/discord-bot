@@ -1,4 +1,4 @@
-Const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
+const { Client, GatewayIntentBits, PermissionFlagsBits } = require('discord.js');
 const express = require('express');
 
 // Express server to satisfy Render's web port requirement
