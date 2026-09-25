@@ -116,4 +116,4 @@ client.on('messageCreate', async message => {
   }
 });
 
-client.login(process.env.123456789012);
+client.login(process.env.DISCORD_TOKEN);
