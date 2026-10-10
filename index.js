@@ -4,7 +4,7 @@ const express = require('express');
 // Express server to satisfy Render's web port requirement
 const app = express();
 const PORT = process.env.PORT || 3000;
-app.get('/', (req, res) => res.send('AIZEN THE GOAT is active!'));
+app.get('/', (req, res) => res.send('POTATO is active!'));
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 const client = new Client({
@@ -38,32 +38,32 @@ client.on('messageCreate', async message => {
   const content = message.content.toLowerCase().trim();
 
   // 1. Ping Command
-  if (content === '!ping') {
-    return message.reply('Pong! 🏓');
+  if (content === 'ping') {
+    return message.reply('Pong 🏓');
   }
 
   // 2. Foot Command
-  if (content === '!foot') {
+  if (content === 'foot') {
     return message.reply('ball');
   }
 
   // 3. Persona GIF Command
-  if (content === '!persona' || content === 'persona') {
+  if (content === 'persona' || content === 'persona') {
     return message.reply('https://giphy.com/gifs/p5-persona5-persona5strikers-FHorv1CAM7Sh1YEoR8');
   }
 
   // 4. Hello / Yo GIF Command
-  if (content === '!hello' || content === 'yo') {
+  if (content === 'hello' || content === 'yo') {
     return message.reply('https://giphy.com/gifs/cute-pokemon-AFdcYElkoNAUE');
   }
 
   // 5. Bye / Cya GIF Command
-  if (content === '!bye' || content === 'bye' || content === 'cya' || content === '!cya') {
+  if (content === 'bye' || content === 'bye' || content === 'cya' || content === 'cya') {
     return message.reply('https://giphy.com/gifs/bye-ichimaru-gin-upMEKtG4p7kuRmNOEL');
   }
 
   // 6. Dance GIF Command (!dance)
-  if (content === '!dance') {
+  if (content === 'dance') {
     return message.reply('https://giphy.com/gifs/game-persona-CRLU6jPUinG6Y');
   }
 
