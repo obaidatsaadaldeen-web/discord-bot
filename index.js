@@ -27,7 +27,7 @@ client.once('ready', () => {
 client.on('guildMemberAdd', async member => {
   const channel = member.guild.channels.cache.get(WELCOME_CHANNEL_ID);
   if (channel) {
-    channel.send(`WELCOME TO THE BEST POTATOE SERVER EVER<@${member.id}>! OBEY THE RULES OR ELSE.... 🚫🔥`);
+    channel.send(`WELCOME TO THE BEST POTATO SERVER EVER<@${member.id}>! OBEY THE RULES OR ELSE.... 🚫🔥`);
   }
 });
 
